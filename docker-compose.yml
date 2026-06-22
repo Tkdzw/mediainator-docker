@@ -1,0 +1,191 @@
+
+
+services:
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    ports:
+      - "8096:8096"
+    volumes:
+      - ./jellyfin-config:/config
+      - ./jellyfin-cache:/cache
+      - "C:/Users/Asher/Videos:/videos"
+    restart: unless-stopped
+
+  deluge:
+    image: lscr.io/linuxserver/deluge:latest
+    container_name: deluge
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Africa/Harare
+    ports:
+      - "8112:8112"   # Web UI
+      - "58846:58846" # Daemon
+      - "58946:58946"
+    volumes:
+      - ./deluge/config:/config
+      - C:/Users/Asher/Videos/Downloads:/downloads
+    restart: unless-stopped
+
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    ports:
+      - "7878:7878"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Africa/Harare
+    volumes:
+      - ./radarr-config:/config
+      - "C:/Users/Asher/Videos:/videos"
+      - "C:/Users/Asher/Videos:/downloads"
+    restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr:latest
+    container_name: sonarr
+    ports:
+      - "8989:8989"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Africa/Harare
+    volumes:
+      - ./sonarr-config:/config
+      - "C:/Users/Asher/Videos:/videos"
+      - "C:/Users/Asher/Videos:/downloads"
+    restart: unless-stopped
+
+  prowlarr:
+    image: linuxserver/prowlarr:latest
+    container_name: prowlarr
+    ports:
+      - "9696:9696"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Africa/Harare
+    volumes:
+      - ./prowlarr:/config
+    restart: unless-stopped
+
+  # overseerr:
+  #   image: sctx/overseerr
+  #   container_name: overseerr
+  #   ports:
+  #     - "5055:5055"
+  #   environment:
+  #     - LOG_LEVEL=info
+  #     - TZ=Africa/Harare
+  #   volumes:
+  #     - ./overseerr:/app/config
+  #   restart: unless-stopped
+
+  jellyseerr:
+    image: fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    ports:
+      - 5055:5055
+    environment:
+      - LOG_LEVEL=info
+      - TZ=Africa/Harare
+    volumes:
+      - ./jellyseerr/config:/app/config
+    restart: unless-stopped
+
+  # musicseerr:
+  #   image: ghcr.io/habirabbu/musicseerr:latest
+  #   container_name: musicseerr
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - PORT=8688
+  #     - TZ=Etc/UTC
+  #   ports:
+  #     - "8688:8688"
+  #   volumes:
+  #     - ./config:/app/config
+  #     - ./cache:/app/cache
+  #     - "C:/Users/Asher/Videos/Music:/music"
+  #   restart: unless-stopped
+
+  bazarr:
+    image: linuxserver/bazarr:latest
+    container_name: bazarr
+    ports:
+      - "6767:6767"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Africa/Harare
+    volumes:
+      - ./bazarr:/config
+      - "C:/Users/Asher/Videos:/videos"
+    restart: unless-stopped
+
+  # plex:
+  #   image: lscr.io/linuxserver/plex:latest
+  #   container_name: plex
+  #   ports:
+  #     - "32400:32400"
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - VERSION=docker
+  #     - TZ=Africa/Harare
+  #     - PLEX_CLAIM=claim-4KpuVFW8C3hRHytK1e_Q
+  #   volumes:
+  #     - ./plex-config:/config
+  #     - ./plex-transcode:/transcode
+  #     - "C:/Users/Asher/Videos:/videos"
+  #   restart: unless-stopped
+
+  # qbittorrent:
+  #   image: lscr.io/linuxserver/qbittorrent:latest
+  #   container_name: qbittorrent
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=Africa/Harare
+  #     - WEBUI_PORT=8081
+  #   volumes:
+  #     - ./qbittorrent/config:/config
+  #     - "C:/Users/Asher/Videos/Media:/media"
+  #     - "C:/Users/Asher/Videos/Downloads:/downloads"
+  #   ports:
+  #     - "8081:8081"
+  #     - "6881:6881"
+  #     - "6881:6881/udp"
+  #   restart: unless-stopped
+
+  # nginx-proxy-manager:
+  #   image: jc21/nginx-proxy-manager:latest
+  #   container_name: nginx-proxy-manager
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #     - "81:81"
+  #     - "443:443"
+  #   volumes:
+  #     - ./npm/data:/data
+  #     - ./npm/letsencrypt:/etc/letsencrypt
+  
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    restart: unless-stopped
+    ports:
+      - "8191:8191"
+    environment:
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - TZ=Africa/Harare
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8191"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
