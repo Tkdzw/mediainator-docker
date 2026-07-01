@@ -1,5 +1,3 @@
-
-
 services:
 
   jellyfin:
@@ -84,16 +82,16 @@ services:
   #     - ./overseerr:/app/config
   #   restart: unless-stopped
 
-  jellyseerr:
-    image: fallenbagel/jellyseerr:latest
-    container_name: jellyseerr
+  seerr:
+    image: seerr/seerr:v3
+    container_name: seerr
     ports:
       - 5055:5055
     environment:
       - LOG_LEVEL=info
       - TZ=Africa/Harare
     volumes:
-      - ./jellyseerr/config:/app/config
+      - ./seerr/config:/app/config
     restart: unless-stopped
 
   # musicseerr:
