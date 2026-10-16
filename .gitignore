@@ -14,4 +14,23 @@ radarr-config
 sonarr-config
 jellyfin-cache
 
+# Container data
+**/config/
+**/cache/
 
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Docker overrides
+docker-compose.override.yml
